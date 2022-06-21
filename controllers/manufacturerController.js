@@ -3,7 +3,17 @@ const Manufacturer = require("../models/manufacturer");
 
 // Display a list of all manufacturers
 exports.manufacturer_list = function (req, res, next) {
-  res.send("Not implemented yet: manufacturer list GET");
+  // Query the db for all manufacturer names
+  Manufacturer.find({}, "name").exec((err, results) => {
+    if (err) {
+      return next(err);
+    }
+    // Success, render the list of manufacturer names
+    res.render("manufacturer_list", {
+      title: "All Manufacturers",
+      manufacturer_names: results,
+    });
+  });
 };
 
 // Display individual manufacturer info, based in ID

@@ -1,0 +1,10 @@
+extends layout 
+
+block content
+    h1= title 
+
+    ul
+        each val in manufacturer_names
+            li 
+                button(class='list-item-button')
+                    a(href=val.url) #{val.name}
