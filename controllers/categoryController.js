@@ -3,7 +3,17 @@ const Category = require("../models/category");
 
 // Display list of all categories.
 exports.category_list = function (req, res, next) {
-  res.send("Not implemented: category list GET");
+  // Query the db for all Category names
+  Category.find({}, "name").exec((err, results) => {
+    if (err) {
+      return next(err);
+    }
+    // Success, render the list of categories
+    res.render("category_list", {
+      title: "All Categories",
+      category_names: results,
+    });
+  });
 };
 
 // Display individual category info, based on ID

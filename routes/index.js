@@ -6,18 +6,17 @@ const component_controller = require("../controllers/componentController");
 const manufacturer_controller = require("../controllers/manufacturerController");
 const category_controller = require("../controllers/categoryController");
 
-/* GET home page. */
+/* Home page routes */
 router.get("/", function (req, res, next) {
   res.redirect("/list");
 });
-
 router.get("/list", function (req, res, next) {
   res.render("index", { title: "PC Part Picker" });
 });
 
 /* Component routes */
 router.get("/components", component_controller.component_list);
-router.get("/:componentid", component_controller.component_detail);
+router.get("/component/:componentid", component_controller.component_detail);
 router.get("/component/create", component_controller.component_create_get);
 router.post("/component/create", component_controller.component_create_post);
 router.get(
@@ -39,7 +38,10 @@ router.post(
 
 /* Manufacturer routes */
 router.get("/manufacturers", manufacturer_controller.manufacturer_list);
-router.get("/:manufacturerid", manufacturer_controller.manufacturer_detail);
+router.get(
+  "/manufacturer/:manufacturerid",
+  manufacturer_controller.manufacturer_detail
+);
 router.get(
   "/manufacturer/create",
   manufacturer_controller.manufacturer_create_get
@@ -67,7 +69,7 @@ router.post(
 
 /* Category routes */
 router.get("/categories", category_controller.category_list);
-router.get("/:categoryid", category_controller.category_detail);
+router.get("/category/:categoryid", category_controller.category_detail);
 router.get("/category/create", category_controller.category_create_get);
 router.post("/category/create", category_controller.category_create_post);
 router.get(
