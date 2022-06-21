@@ -11,7 +11,7 @@ var app = express();
 
 // Set up Mongoose connection
 const mongoose = require("mongoose");
-const mongoDB = process.env.MONGODB_URI;
+const mongoDB = process.env.MONGODB_URI; // Use secret connection string.
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true }); // Sets up the default db connection.
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error: ")); // Allows db errors to be printed to console.
