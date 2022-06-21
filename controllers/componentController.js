@@ -1,5 +1,6 @@
 const express = require("express");
 const Component = require("../models/component");
+const mongoose = require("mongoose");
 
 // Display a list of all PC components
 exports.component_list = function (req, res, next) {
