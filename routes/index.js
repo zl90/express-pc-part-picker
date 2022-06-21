@@ -16,9 +16,9 @@ router.get("/list", function (req, res, next) {
 
 /* Component routes */
 router.get("/components", component_controller.component_list);
-router.get("/component/:componentid", component_controller.component_detail);
 router.get("/component/create", component_controller.component_create_get);
 router.post("/component/create", component_controller.component_create_post);
+router.get("/component/:componentid", component_controller.component_detail);
 router.get(
   "/component/:componentid/update",
   component_controller.component_update_get
@@ -39,16 +39,16 @@ router.post(
 /* Manufacturer routes */
 router.get("/manufacturers", manufacturer_controller.manufacturer_list);
 router.get(
-  "/manufacturer/:manufacturerid",
-  manufacturer_controller.manufacturer_detail
-);
-router.get(
   "/manufacturer/create",
   manufacturer_controller.manufacturer_create_get
 );
 router.post(
   "/manufacturer/create",
   manufacturer_controller.manufacturer_create_post
+);
+router.get(
+  "/manufacturer/:manufacturerid",
+  manufacturer_controller.manufacturer_detail
 );
 router.get(
   "/manufacturer/:manufacturerid/update",
@@ -69,9 +69,9 @@ router.post(
 
 /* Category routes */
 router.get("/categories", category_controller.category_list);
-router.get("/category/:categoryid", category_controller.category_detail);
 router.get("/category/create", category_controller.category_create_get);
 router.post("/category/create", category_controller.category_create_post);
+router.get("/category/:categoryid", category_controller.category_detail);
 router.get(
   "/category/:categoryid/update",
   category_controller.category_update_get

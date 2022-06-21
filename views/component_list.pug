@@ -1,0 +1,30 @@
+extends layout 
+
+block content
+    h1= title 
+    a(href='/component/create') + Add a new part
+
+    table
+        tr
+            th 
+                p Name 
+            th 
+                p Manufacturer 
+            th 
+                p Category 
+            th 
+                p Price 
+            th 
+
+        each val in component_list
+            tr
+                td 
+                    a(href=val.url) #{val.name}
+                td 
+                    a(href=val.manufacturer.url) #{val.manufacturer.name}
+                td 
+                    a(href=val.category.url) #{val.category.name}
+                td 
+                    #{val.price}
+                td 
+                    button(class="add-category-button") ADD

@@ -1,10 +1,24 @@
 const express = require("express");
 const Component = require("../models/component");
-const mongoose = require("mongoose");
+const Manufacturer = require("../models/manufacturer");
+const Category = require("../models/category");
 
 // Display a list of all PC components
 exports.component_list = function (req, res, next) {
-  res.send("Not implemented: component list GET");
+  // Query the db for all PC components
+  Component.find()
+    .populate("manufacturer")
+    .populate("category")
+    .exec((err, results) => {
+      if (err) {
+        return next(err);
+      }
+      // Success, render the list of PC components
+      res.render("component_list", {
+        title: "All PC Components",
+        component_list: results,
+      });
+    });
 };
 
 // Display individual Component info, based on ID
