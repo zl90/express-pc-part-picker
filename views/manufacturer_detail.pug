@@ -3,14 +3,14 @@ extends layout
 block content
     h1= title 
     p= description
-    a(href='/category/create') + Add a new Category
+    a(href='/manufacturer/create') + Add a new Manufacturer
 
     table
         tr
             th 
                 p Name 
             th 
-                p Manufacturer 
+                p Category 
             th 
                 p Stock 
             th 
@@ -22,7 +22,7 @@ block content
                 td 
                     a(href=val.url) #{val.name}
                 td 
-                    a(href=val.manufacturer.url) #{val.manufacturer.name}
+                    a(href=val.category.url) #{val.category.name}
                 td 
                      #{val.quantity}
                 td 

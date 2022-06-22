@@ -7,6 +7,7 @@ exports.category_list = function (req, res, next) {
   // Query the db for all Category names
   Category.find({}, "name").exec((err, results) => {
     if (err) {
+      // Found some error, pass it on to the error-handler middleware function
       return next(err);
     }
     // Success, render the list of categories
@@ -54,7 +55,7 @@ exports.category_detail = function (req, res, next) {
       });
   });
 
-  // Asyncronously find the data in the DB using both promises, then process the results.
+  // Asyncronously query the DB using both promises, then process the results.
   Promise.all([findCategoryById, findComponentsByCategory])
     .then((results) => {
       // Success, render the category info
@@ -65,6 +66,7 @@ exports.category_detail = function (req, res, next) {
       });
     })
     .catch((err) => {
+      // Found some error, pass it on to the error-handler middleware function
       return next(err);
     });
 };
