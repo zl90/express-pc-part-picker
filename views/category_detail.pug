@@ -1,0 +1,31 @@
+extends layout 
+
+block content
+    h1= title 
+    p= description
+    a(href='/category/create') + Add a new Category
+
+    table
+        tr
+            th 
+                p Name 
+            th 
+                p Manufacturer 
+            th 
+                p Stock 
+            th 
+                p Price 
+            th 
+
+        each val in component_list
+            tr
+                td 
+                    a(href=val.url) #{val.name}
+                td 
+                    a(href=val.manufacturer.url) #{val.manufacturer.name}
+                td 
+                     #{val.quantity}
+                td 
+                    #{val.price}
+                td 
+                    button(class="add-category-button") ADD

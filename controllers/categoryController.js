@@ -1,5 +1,6 @@
 const express = require("express");
 const Category = require("../models/category");
+const Component = require("../models/component");
 
 // Display list of all categories.
 exports.category_list = function (req, res, next) {
@@ -18,7 +19,54 @@ exports.category_list = function (req, res, next) {
 
 // Display individual category info, based on ID
 exports.category_detail = function (req, res, next) {
-  res.send("Not implemented: category detail GET");
+  // This promise finds a specific Category, from the category ID in the URL parameter
+  const findCategoryById = new Promise((resolve, reject) => {
+    Category.findById(req.params.categoryid).exec((err, results) => {
+      // Check for query/db errors
+      if (err) {
+        reject(err);
+      }
+
+      if (results === null) {
+        // No results returned from query, show error
+        const err = new Error("Category not found");
+        err.status = 404;
+        reject(err);
+      }
+
+      // Success, return Category info
+      resolve(results);
+    });
+  });
+
+  // This promise finds all PC Components which have the Category defined by the category ID
+  const findComponentsByCategory = new Promise((resolve, reject) => {
+    Component.find({ category: req.params.categoryid })
+      .populate("category")
+      .populate("manufacturer")
+      .exec((err, results) => {
+        // Check for query/db errors
+        if (err) {
+          reject(err);
+        }
+        // Success, return all Components corresponding to categoryid
+        resolve(results);
+      });
+  });
+
+  // Asyncronously find the data in the DB using both promises, then process the results.
+  Promise.all([findCategoryById, findComponentsByCategory])
+    .then((results) => {
+      // Success, render the category info
+      res.render("category_detail", {
+        title: results[0].name,
+        description: results[0].description,
+        component_list: results[1],
+      });
+    })
+    .catch((err) => {
+      return next(err);
+    });
 };
 
 // Display the Create Category form on GET
