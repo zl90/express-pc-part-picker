@@ -21,9 +21,46 @@ exports.component_list = function (req, res, next) {
     });
 };
 
-// Display individual Component info, based on ID
+// Display individual PC Component info, based on ID
 exports.component_detail = function (req, res, next) {
-  res.send("Not implemented: component detail GET");
+  /**
+   * This promise queries the db for the PC Component corresponding to the componentid in the URL
+   */
+  const findComponentById = new Promise((resolve, reject) => {
+    Component.findById(req.params.componentid)
+      .populate("manufacturer")
+      .populate("category")
+      .exec((err, results) => {
+        // Check for db/query errors
+        if (err) {
+          reject(err);
+        }
+
+        // Check for empty results set
+        if (results === null) {
+          // Results are empty, show error
+          const err = new Error("Component not found");
+          err.status = 404;
+          reject(err);
+        }
+
+        // Success, return the PC Component info
+        resolve(results);
+      });
+  });
+
+  findComponentById
+    .then((results) => {
+      // Success, render the PC Component info
+      res.render("component_detail", {
+        title: results.name,
+        component: results,
+      });
+    })
+    .catch((err) => {
+      // Catch any erros and pass them along to the error handling middleware
+      return next(err);
+    });
 };
 
 // Display Create Component form on GET

@@ -1,0 +1,24 @@
+extends layout 
+
+block content
+    h1= title 
+    a(href=component.url + '/update') Update
+    a(href=component.url + '/delete') Delete
+
+    ul(class='component-detail-list') 
+        li(class='component-detail-li')
+            h2(class='component-detail-heading') Category 
+            a(class='component-detail-link' href=component.category.url) #{component.category.name}
+        li(class='component-detail-li')
+            h2(class='component-detail-heading') Manufacturer 
+            a(class='component-detail-link' href=component.manufacturer.url) #{component.manufacturer.name}
+        li(class='component-detail-li')
+            h2(class='component-detail-heading') Price 
+            p #{component.price}
+        li(class='component-detail-li')
+            h2(class='component-detail-heading') Stock 
+            p #{component.quantity}
+        
+    section(class='component-detail-description-container')
+        h2(class='component-detail-description-heading') Features 
+        p #{component.description}
