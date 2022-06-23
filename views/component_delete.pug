@@ -1,0 +1,9 @@
+extends layout 
+
+block content
+    h1= title 
+    p Are you sure you want to delete this component?
+
+    form(method='POST' action="")
+        button(type="submit") Delete 
+        a(href=component.url) Cancel
