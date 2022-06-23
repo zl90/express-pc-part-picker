@@ -1,6 +1,7 @@
 const express = require("express");
 const Category = require("../models/category");
 const Component = require("../models/component");
+const { body, validationResult } = require("express-validator");
 
 // Display list of all categories.
 exports.category_list = function (req, res, next) {
@@ -63,6 +64,7 @@ exports.category_detail = function (req, res, next) {
         title: results[0].name,
         description: results[0].description,
         component_list: results[1],
+        category: results[0],
       });
     })
     .catch((err) => {
@@ -73,13 +75,78 @@ exports.category_detail = function (req, res, next) {
 
 // Display the Create Category form on GET
 exports.category_create_get = function (req, res, next) {
-  res.send("Not implemented: category create GET");
+  // Just render the Create Category form.
+  // Let the form know that it's not updating an existing Category, so display an empty form.
+  res.render("category_form", {
+    title: "Add new Category",
+    isUpdating: false,
+  });
 };
 
 // Handle the creation of a new Category on POST
-exports.category_create_post = function (req, res, next) {
-  res.send("Not implemented: category create POST");
-};
+exports.category_create_post = [
+  // Validate and sanitize the POST request values (The user inputs 'name' and 'description' values)
+  body("name")
+    .trim()
+    .isLength({ min: 1, max: 100 })
+    .withMessage("Name must be 1-100 characters long")
+    .escape(),
+  body("description")
+    .trim()
+    .isLength({ min: 1, max: 1000 })
+    .withMessage("Description must be 1-1000 characters long")
+    .escape(),
+
+  function (req, res, next) {
+    // Extract the validation errors from the POST request.
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the Create Category form again with sanitized values/error messages.
+      res.render("category_form", {
+        title: "Add new Category",
+        category: req.body,
+        isUpdating: false,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // No validation errors, save the new Category to the db
+
+      // First, check if the new Category already exists in the db:
+      Category.findOne({ name: req.body.name }).exec((err, results) => {
+        // check for db/query errors
+        if (err) {
+          return next(err);
+        }
+
+        if (results !== null) {
+          // Category already exists in the db, redirect to it's Detail page
+          res.redirect(results.url);
+        } else {
+          // Category doesn't exist already, proceed to save it to the db
+
+          // Create the new Category instance with escaped and trimmed data:
+          const newCategory = new Category({
+            name: req.body.name,
+            description: req.body.description,
+          });
+
+          // Save new Category to the db using Mongoose:
+          newCategory.save(function (err) {
+            // check for db/query errors
+            if (err) {
+              return next(err);
+            }
+
+            // Category successfully saved. Redirect to it's Detail page
+            res.redirect(newCategory.url);
+          });
+        }
+      });
+    }
+  },
+];
 
 // Display the Update Category form on GET (similar to Create Category)
 exports.category_update_get = function (req, res, next) {

@@ -3,7 +3,8 @@ extends layout
 block content
     h1= title 
     p= description
-    a(href='/manufacturer/create') + Add a new Manufacturer
+    a(href=manufacturer.url + '/update') Update
+    a(href=manufacturer.url + '/delete') Delete
 
     table
         tr

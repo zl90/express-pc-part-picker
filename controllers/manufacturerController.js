@@ -69,6 +69,7 @@ exports.manufacturer_detail = function (req, res, next) {
         title: results[0].name,
         description: results[0].description,
         component_list: results[1],
+        manufacturer: results[0],
       });
     })
     .catch((err) => {

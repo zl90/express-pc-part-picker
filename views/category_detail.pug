@@ -3,7 +3,8 @@ extends layout
 block content
     h1= title 
     p= description
-    a(href='/category/create') + Add a new Category
+    a(href=category.url + '/update') Update
+    a(href=category.url + '/delete') Delete
 
     table
         tr
