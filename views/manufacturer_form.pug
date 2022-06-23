@@ -5,9 +5,9 @@ block content
     
         form(method='POST' action='' class='manufacturer-form')
             label(for="manufacturer-name") NAME 
-            input(type="text" id='manufactuer-name' minlength=1 maxlength=100 value=manufacturer ? manufacturer.name : '' name='name')
+            input(type="text" id='manufacturer-name' minlength=1 maxlength=100 value=manufacturer ? manufacturer.name : '' name='name')
             label(for="manufacturer-description") DESCRIPTION 
-            input(type="text" id='manufactuer-description' minlength=1 maxlength=1000 value=manufacturer ? manufacturer.description : '' name='description')
+            input(type="text" id='manufacturer-description' minlength=1 maxlength=1000 value=manufacturer ? manufacturer.description : '' name='description')
             button(type="submit") Submit 
             a(href='/manufacturers') Cancel
 
