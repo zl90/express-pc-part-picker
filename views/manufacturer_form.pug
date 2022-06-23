@@ -1,0 +1,19 @@
+extends layout 
+
+block content
+    h1= title 
+    
+        form(method='POST' action='' class='manufacturer-form')
+            label(for="manufacturer-name") NAME 
+            input(type="text" id='manufactuer-name' minlength=1 maxlength=100 value=manufacturer ? manufacturer.name : '' name='name')
+            label(for="manufacturer-description") DESCRIPTION 
+            input(type="text" id='manufactuer-description' minlength=1 maxlength=1000 value=manufacturer ? manufacturer.description : '' name='description')
+            button(type="submit") Submit 
+            a(href='/manufacturers') Cancel
+
+        if (errors)
+            h2 Error: 
+            ul 
+                each error in errors 
+                    li= error.msg
+

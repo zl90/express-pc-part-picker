@@ -1,7 +1,8 @@
 extends layout 
 
 block content
-    h1= title 
+    h1= title
+    a(href='/manufacturer/create') + Add new Manufacturer
 
     ul
         each val in manufacturer_names
