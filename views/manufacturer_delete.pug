@@ -1,0 +1,17 @@
+extends layout 
+
+block content
+    h1= title 
+    if (component_list.length > 0)
+        p Please delete the following PC Components before deleting this manufacturer: 
+
+        ul 
+            each component in component_list 
+                li
+                    a(href=component.url) #{component.name}
+    else
+        p Are you sure you want to delete this manufacturer?
+
+        form(method='POST' action="")
+            button(type="submit") Delete 
+            a(href=manufacturer.url) Cancel

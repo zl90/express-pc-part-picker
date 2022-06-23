@@ -165,10 +165,135 @@ exports.manufacturer_update_post = function (req, res, next) {
 
 // Display the Delete Manufacturer form on GET
 exports.manufacturer_delete_get = function (req, res, next) {
-  res.send("Not implemented yet: manufacturer delete GET");
+  /**
+   * This promise queries the db for a Manufacturer which has the ID supplied in the URL
+   */
+  const findManufacturerById = new Promise((resolve, reject) => {
+    Manufacturer.findById(req.params.manufacturerid).exec((err, results) => {
+      // check for db/query errors
+      if (err) {
+        reject(err);
+      }
+
+      if (results === null) {
+        // No results returned from query, show error
+        const err = new Error("Manufacturer not found");
+        err.status = 404;
+        reject(err);
+      }
+
+      // Success, return category info
+      resolve(results);
+    });
+  });
+
+  /**
+   * This promise queries the db for all PC Components which have the same
+   * manufacturer as the one supplied in the URL.
+   */
+  const findComponentsByManufacturer = new Promise((resolve, reject) => {
+    Component.find({ manufacturer: req.params.manufacturerid })
+      .populate("manufacturer")
+      .populate("category")
+      .exec((err, results) => {
+        // check for db/query errors
+        if (err) {
+          reject(err);
+        }
+
+        // Success, return all PC Components corresponding to manufacturerid
+        resolve(results);
+      });
+  });
+
+  // Asyncronously query the DB using both promises, then process the results.
+  Promise.all([findManufacturerById, findComponentsByManufacturer])
+    .then((results) => {
+      // Success, render the manufacturer info
+      res.render("manufacturer_delete", {
+        title: "Delete Manufacturer:\n" + results[0].name,
+        description: results[0].description,
+        component_list: results[1],
+        manufacturer: results[0],
+      });
+    })
+    .catch((err) => {
+      // Found some error, pass it on to the error-handler middleware function
+      return next(err);
+    });
 };
 
 // Handle the deletion of a Manufacturer on POST
 exports.manufacturer_delete_post = function (req, res, next) {
-  res.send("Not implemented yet: manufacturer delete POST");
+  /**
+   * This promise queries the db for a Manufacturer which has the ID supplied in the URL
+   */
+  const findManufacturerById = new Promise((resolve, reject) => {
+    Manufacturer.findById(req.params.manufacturerid).exec((err, results) => {
+      // check for db/query errors
+      if (err) {
+        reject(err);
+      }
+
+      if (results === null) {
+        // No results returned from query, show error
+        const err = new Error("Manufacturer not found");
+        err.status = 404;
+        reject(err);
+      }
+
+      // Success, return category info
+      resolve(results);
+    });
+  });
+
+  /**
+   * This promise queries the db for all PC Components which have the same
+   * manufacturer as the one supplied in the URL.
+   */
+  const findComponentsByManufacturer = new Promise((resolve, reject) => {
+    Component.find({ manufacturer: req.params.manufacturerid })
+      .populate("manufacturer")
+      .populate("category")
+      .exec((err, results) => {
+        // check for db/query errors
+        if (err) {
+          reject(err);
+        }
+
+        // Success, return all PC Components corresponding to manufacturerid
+        resolve(results);
+      });
+  });
+
+  // Asyncronously query the DB using both promises, then process the results.
+  Promise.all([findManufacturerById, findComponentsByManufacturer])
+    .then((results) => {
+      // Check one last time for any components which depend on this manufacturer
+      if (results[1].length > 0) {
+        // Dependents found, go back to the manufacturer delete page
+        res.render("manufacturer_delete", {
+          title: "Delete Manufacturer:\n" + results[0].name,
+          description: results[0].description,
+          component_list: results[1],
+          manufacturer: results[0],
+        });
+        return;
+      } else {
+        // No dependents found. Delete this manufacturer
+        Manufacturer.findByIdAndRemove(req.params.manufacturerid).exec(
+          (error) => {
+            if (error) {
+              return next(error);
+            }
+            // Success, manufacturer has been deleted. Redirect to the list of manufacturers:
+            res.redirect("/manufacturers");
+          }
+        );
+      }
+    })
+    .catch((err) => {
+      // Found some error, pass it on to the error-handler middleware function
+      return next(err);
+    });
 };
