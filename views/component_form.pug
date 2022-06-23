@@ -7,16 +7,16 @@ block content
             label(for="component-name") NAME 
             input(type="text" id='component-name' minlength=1 maxlength=100 value=component ? component.name : '' name='name' required=true)
             label(for="component-description") FEATURES 
-            input(type="text" id='component-description' minlength=1 maxlength=1000 value=component ? component.description : '' name='description' required=true)
+            textarea(type="text" cols="30" rows="10" id='component-description' minlength=1 maxlength=1000 required=true name='description') #{component ? component.description : '' }
             label(for="component-price") PRICE 
             input(type="number" id='component-price' min=0 max=999999 value=component ? component.price : 0 name='price' step='any' required=true)
             label(for="component-stock") STOCK 
-            input(type="number" id='component-stock' min=0 max=9999 value=component ? component.stock : 0 name='quantity' required=true)
+            input(type="number" id='component-stock' min=0 max=9999 value=component ? component.quantity : 0 name='quantity' required=true)
             label(for="category") CATEGORY 
             select(name='categoryid' id='category' required=true placeholder='Select Category...')
                 if (component != null)
                     each category in category_list 
-                        option(value=category._id selected=component_category._id == category._id ? 'selected' : '') #{category.name}
+                        option(value=category._id selected=((component_category._id.toString() === category._id.toString()) ? true : false))= category.name
                 else 
                     each category in category_list 
                         option(value=category._id) #{category.name}
@@ -24,11 +24,11 @@ block content
             select(name='manufacturerid' id='manufacturer' required=true placeholder='Select Manufacturer...')
                 if (component != null)
                     each manufacturer in manufacturer_list 
-                        option(value=manufacturer._id selected=component_manufacturer._id == manufacturer._id ? 'selected' : '') #{manufacturer.name}
+                        option(value=manufacturer._id selected=((component_manufacturer._id.toString() === manufacturer._id.toString()) ? true : false))= manufacturer.name
                 else 
                     each manufacturer in manufacturer_list 
                         option(value=manufacturer._id) #{manufacturer.name}
-            button(type="submit") Submit 
+            button(type="submit") #{isUpdating ? 'Update' : 'Submit'}
             a(href='/components') Cancel
 
         if (errors)

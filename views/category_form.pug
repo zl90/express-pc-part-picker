@@ -7,7 +7,7 @@ block content
             label(for="category-name") NAME 
             input(type="text" id='category-name' minlength=1 maxlength=100 value=category ? category.name : '' name='name')
             label(for="category-description") DESCRIPTION 
-            input(type="text" id='category-description' minlength=1 maxlength=1000 value=category ? category.description : '' name='description')
+            textarea( cols="30" rows="10" type="text" id='category-description' minlength=1 maxlength=1000  name='description') #{category ? category.description : ''}
             button(type="submit") Submit 
             a(href='/categories') Cancel
 
