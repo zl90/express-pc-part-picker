@@ -174,7 +174,7 @@ exports.manufacturer_update_get = function (req, res, next) {
     // Success, render the update form
     // Let the form know that it's updating an existing Manufacturer, so display a pre-filled form.
     res.render("manufacturer_form", {
-      title: "Add new Manufacturer",
+      title: "Update: " + results.name,
       isUpdating: true,
       manufacturer: results,
     });
@@ -202,7 +202,7 @@ exports.manufacturer_update_post = [
     if (!errors.isEmpty()) {
       // There are errors. Render the Update Manufacturer form again with sanitized values/error messages.
       res.render("manufacturer_form", {
-        title: "Add new Manufacturer",
+        title: "Update: " + req.body.name,
         manufacturer: req.body,
         isUpdating: true,
         errors: errors.array(),

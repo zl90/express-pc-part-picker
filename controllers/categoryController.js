@@ -150,13 +150,85 @@ exports.category_create_post = [
 
 // Display the Update Category form on GET (similar to Create Category)
 exports.category_update_get = function (req, res, next) {
-  res.send("Not implemented: category update GET");
+  /**
+   * queries the db for a Category which has the ID supplied in the URL
+   */
+  Category.findById(req.params.categoryid).exec((err, results) => {
+    // check for db/query errors
+    if (err) {
+      reject(err);
+    }
+
+    if (results === null) {
+      // No results returned from query, show error
+      const err = new Error("Category not found");
+      err.status = 404;
+      reject(err);
+    }
+
+    // Success, render the update form
+    // Let the form know that it's updating an existing Category, so display a pre-filled form.
+    res.render("category_form", {
+      title: "Update: " + results.name,
+      isUpdating: true,
+      category: results,
+    });
+  });
 };
 
 // Handle the updating of a Category on POST
-exports.category_update_post = function (req, res, next) {
-  res.send("Not implemented: category update POST");
-};
+exports.category_update_post = [
+  // Validate and sanitize the POST request values (The user inputs 'name' and 'description' values)
+  body("name")
+    .trim()
+    .isLength({ min: 1, max: 100 })
+    .withMessage("Name must be 1-100 characters long")
+    .escape(),
+  body("description")
+    .trim()
+    .isLength({ min: 1, max: 1000 })
+    .withMessage("Description must be 1-1000 characters long")
+    .escape(),
+
+  function (req, res, next) {
+    // Extract the validation errors from the POST request.
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the Update Category form again with sanitized values/error messages.
+      res.render("category_form", {
+        title: "Update: " + req.body.name,
+        category: req.body,
+        isUpdating: true,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // No validation errors, update the Category in the db
+      // Create a temporary Category instance with escaped and trimmed data:
+      const newCategory = new Category({
+        name: req.body.name,
+        description: req.body.description,
+        _id: req.params.categoryid, // This is required, or a new ID will be assigned!
+      });
+
+      // Overwrite the old category in the db with the temporary category using Mongoose:
+      Category.findByIdAndUpdate(
+        req.params.categoryid,
+        newCategory,
+        {},
+        (update_errors, updated_category) => {
+          // check db/query errors
+          if (update_errors) {
+            return next(update_errors);
+          }
+          // Category successfully updated. Redirect to its Detail page
+          res.redirect(updated_category.url);
+        }
+      );
+    }
+  },
+];
 
 // Display the Delete Category form on GET
 exports.category_delete_get = function (req, res, next) {

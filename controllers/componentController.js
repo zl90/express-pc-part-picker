@@ -349,7 +349,7 @@ exports.component_update_get = function (req, res, next) {
       // render the Update Component form.
       // Let the form know that it is updating an existing PC Component, so display a pre-filled form.
       res.render("component_form", {
-        title: "Add new PC Part",
+        title: "Update: " + results[2].name,
         isUpdating: true,
         category_list: results[0],
         manufacturer_list: results[1],
@@ -477,7 +477,7 @@ exports.component_update_post = [
         if (!errors.isEmpty()) {
           // There are errors. Render the Update Component form again with sanitized values/error messages.
           res.render("component_form", {
-            title: "Add new PC Part",
+            title: "Update: " + req.body.name,
             component_category: results[0],
             component_manufacturer: results[1],
             component: req.body,
