@@ -476,7 +476,6 @@ exports.component_update_post = [
 
         if (!errors.isEmpty()) {
           // There are errors. Render the Update Component form again with sanitized values/error messages.
-          console.log("errors present!");
           res.render("component_form", {
             title: "Add new PC Part",
             component_category: results[0],
@@ -507,13 +506,12 @@ exports.component_update_post = [
             req.params.componentid,
             newComponent,
             {},
-            (update_errors, updated_book) => {
+            (update_errors, updated_component) => {
               if (update_errors) {
                 return next(update_errors);
               }
               // Component successfully updated. Redirect to it's Detail page
-              console.log(updated_book.url);
-              res.redirect(updated_book.url);
+              res.redirect(updated_component.url);
             }
           );
         }

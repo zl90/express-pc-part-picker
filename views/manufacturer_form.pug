@@ -8,7 +8,7 @@ block content
             input(type="text" id='manufacturer-name' minlength=1 maxlength=100 value=manufacturer ? manufacturer.name : '' name='name')
             label(for="manufacturer-description") DESCRIPTION 
             textarea( cols="30" rows="10" id='manufacturer-description' minlength=1 maxlength=1000  name='description') #{manufacturer ? manufacturer.description : ''}
-            button(type="submit") Submit 
+            button(type="submit") #{isUpdating ? 'Update' : 'Submit'}
             a(href='/manufacturers') Cancel
 
         if (errors)

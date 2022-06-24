@@ -8,7 +8,7 @@ block content
             input(type="text" id='category-name' minlength=1 maxlength=100 value=category ? category.name : '' name='name')
             label(for="category-description") DESCRIPTION 
             textarea( cols="30" rows="10" type="text" id='category-description' minlength=1 maxlength=1000  name='description') #{category ? category.description : ''}
-            button(type="submit") Submit 
+            button(type="submit") #{isUpdating ? 'Update' : 'Submit'}
             a(href='/categories') Cancel
 
         if (errors)

@@ -155,13 +155,84 @@ exports.manufacturer_create_post = [
 
 // Display the Update Manufacturer form on GET
 exports.manufacturer_update_get = function (req, res, next) {
-  res.send("Not implemented yet: manufacturer update GET");
+  /**
+   * queries the db for a Manufacturer which has the ID supplied in the URL
+   */
+  Manufacturer.findById(req.params.manufacturerid).exec((err, results) => {
+    // check for db/query errors
+    if (err) {
+      reject(err);
+    }
+
+    if (results === null) {
+      // No results returned from query, show error
+      const err = new Error("Manufacturer not found");
+      err.status = 404;
+      reject(err);
+    }
+
+    // Success, render the update form
+    // Let the form know that it's updating an existing Manufacturer, so display a pre-filled form.
+    res.render("manufacturer_form", {
+      title: "Add new Manufacturer",
+      isUpdating: true,
+      manufacturer: results,
+    });
+  });
 };
 
 // Handle the Updating of a Manufacturer on POST
-exports.manufacturer_update_post = function (req, res, next) {
-  res.send("Not implemented yet: manufacturer create POST");
-};
+exports.manufacturer_update_post = [
+  // Validate and sanitize the POST request values (The user inputs 'name' and 'description' values)
+  body("name")
+    .trim()
+    .isLength({ min: 1, max: 100 })
+    .withMessage("Name must be 1-100 characters long")
+    .escape(),
+  body("description")
+    .trim()
+    .isLength({ min: 1, max: 1000 })
+    .withMessage("Description must be 1-1000 characters long")
+    .escape(),
+
+  function (req, res, next) {
+    // Extract the validation errors from the POST request.
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the Update Manufacturer form again with sanitized values/error messages.
+      res.render("manufacturer_form", {
+        title: "Add new Manufacturer",
+        manufacturer: req.body,
+        isUpdating: true,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // No validation errors, update the Manufacturer in the db
+      // Create a temporary Manufacturer instance with escaped and trimmed data:
+      const newManufacturer = new Manufacturer({
+        name: req.body.name,
+        description: req.body.description,
+        _id: req.params.manufacturerid, //This is required, or a new ID will be assigned!
+      });
+
+      // Overwrite the old manufacturer in the db with the temporary manufacturer using Mongoose:
+      Manufacturer.findByIdAndUpdate(
+        req.params.manufacturerid,
+        newManufacturer,
+        {},
+        (update_errors, updated_manufacturer) => {
+          if (update_errors) {
+            return next(update_errors);
+          }
+          // Manufacturer successfully updated. Redirect to it's Detail page
+          res.redirect(updated_manufacturer.url);
+        }
+      );
+    }
+  },
+];
 
 // Display the Delete Manufacturer form on GET
 exports.manufacturer_delete_get = function (req, res, next) {
@@ -209,7 +280,7 @@ exports.manufacturer_delete_get = function (req, res, next) {
   // Asyncronously query the DB using both promises, then process the results.
   Promise.all([findManufacturerById, findComponentsByManufacturer])
     .then((results) => {
-      // Success, render the manufacturer info
+      // Success, render the Delete Manufacturer page
       res.render("manufacturer_delete", {
         title: "Delete Manufacturer:\n" + results[0].name,
         description: results[0].description,
