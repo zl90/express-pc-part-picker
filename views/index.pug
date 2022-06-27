@@ -3,3 +3,29 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+
+  table 
+    tr 
+      th Component 
+      th Selection 
+      th Price 
+      th 
+      th
+    each item in listArray 
+      tr 
+        td= item.category.name 
+        td 
+          if (item.component !== null) 
+            a(href=item.component.url) #{item.component.name}
+          else 
+            a(href=item.category.url)
+              button + Choose #{item.category.name}
+        td
+          if (item.component !== null)
+            #{item.component.price}
+          else 
+
+        td 
+          button Buy on Amazon 
+        td 
+          button x

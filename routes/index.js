@@ -5,14 +5,14 @@ var router = express.Router();
 const component_controller = require("../controllers/componentController");
 const manufacturer_controller = require("../controllers/manufacturerController");
 const category_controller = require("../controllers/categoryController");
+const list_controller = require("../controllers/listController");
 
 /* Home page routes */
 router.get("/", function (req, res, next) {
   res.redirect("/list");
 });
-router.get("/list", function (req, res, next) {
-  res.render("index", { title: "PC Part Picker" });
-});
+router.get("/list", list_controller.list_get);
+router.post("/list/:categoryid/:componentid", list_controller.list_post);
 
 /* Component routes */
 router.get("/components", component_controller.component_list);

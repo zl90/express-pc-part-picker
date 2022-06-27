@@ -29,4 +29,5 @@ block content
                 td 
                     #{val.price}
                 td 
-                    button(class="add-component-button") ADD
+                    form(method='post' action=val.addUrl)
+                        button(type="submit") + Add

@@ -4,6 +4,8 @@ block content
     h1= title 
     a(href=component.url + '/update') Update
     a(href=component.url + '/delete') Delete
+    form(method='post' action=component.addUrl)
+        button(type="submit") + Add
 
     ul(class='component-detail-list') 
         li(class='component-detail-li')

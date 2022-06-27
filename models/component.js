@@ -27,5 +27,10 @@ ComponentSchema.virtual("url").get(function () {
   return "/component/" + this._id;
 });
 
+// Virtual URL used for adding the Component to the "My List" page
+ComponentSchema.virtual("addUrl").get(function () {
+  return "/list/" + this.category._id + "/" + this._id;
+});
+
 // Finalize the model and then export it.
 module.exports = mongoose.model("Component", ComponentSchema);
