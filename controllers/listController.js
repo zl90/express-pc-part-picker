@@ -34,6 +34,7 @@ exports.list_get = function (req, res, next) {
     .then((results) => {
       // Build the main list object
       let listArray = [];
+      let totalPrice = 0;
 
       results[0].forEach((categoryElement) => {
         // Check all categories to see if they exist in the cookie list
@@ -44,14 +45,18 @@ exports.list_get = function (req, res, next) {
         });
 
         let foundComponent = null;
-        if (foundCategoryInCookies !== undefined) {
+        if (
+          foundCategoryInCookies !== undefined &&
+          foundCategoryInCookies !== null
+        ) {
           // get the corresponding "selected" component
           foundComponent = results[1].find(function (item) {
             return item.id === req.cookies[foundCategoryInCookies];
           });
         }
 
-        if (foundComponent !== undefined) {
+        if (foundComponent !== undefined && foundComponent !== null) {
+          totalPrice += foundComponent.price;
           // push the "selected" component to the list
           listArray.push({
             category: categoryElement,
@@ -69,6 +74,7 @@ exports.list_get = function (req, res, next) {
       res.render("index", {
         title: "PC Part Picker",
         listArray: listArray,
+        totalPrice: totalPrice,
       });
     })
     .catch((err) => {

@@ -22,7 +22,7 @@ block content
               button + Choose #{item.category.name}
         td
           if (item.component !== null)
-            #{item.component.price}
+            #{'$' + item.component.price}
           else 
 
         td 
@@ -33,3 +33,7 @@ block content
           if (item.component !== null)
             form(method='post' action=item.component.deleteUrl)
                 button(type='submit') x 
+    tr 
+      td 
+      td 
+      td Total: $#{totalPrice}
