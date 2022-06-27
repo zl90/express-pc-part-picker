@@ -32,5 +32,18 @@ ComponentSchema.virtual("addUrl").get(function () {
   return "/list/" + this.category._id + "/" + this._id;
 });
 
+// Virtual URL used for deleting the Component from the "My List" page
+ComponentSchema.virtual("deleteUrl").get(function () {
+  return "/listdelete/" + this.category._id;
+});
+
+// Virtual URL used for searching the Component on Amazon.com
+ComponentSchema.virtual("amazonUrl").get(function () {
+  return (
+    "https://www.amazon.com/s?k=" +
+    this.name.toLowerCase().replace(/\s/g, "+").replaceAll("/", " ")
+  );
+});
+
 // Finalize the model and then export it.
 module.exports = mongoose.model("Component", ComponentSchema);

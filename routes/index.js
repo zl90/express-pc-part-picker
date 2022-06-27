@@ -13,6 +13,7 @@ router.get("/", function (req, res, next) {
 });
 router.get("/list", list_controller.list_get);
 router.post("/list/:categoryid/:componentid", list_controller.list_post);
+router.post("/listdelete/:categoryid", list_controller.list_delete);
 
 /* Component routes */
 router.get("/components", component_controller.component_list);

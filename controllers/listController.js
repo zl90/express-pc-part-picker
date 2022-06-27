@@ -82,5 +82,12 @@ exports.list_post = function (req, res, next) {
   res.cookie(req.params.categoryid, req.params.componentid, {
     maxAge: 9999999999999,
   });
+  return res.status(200).redirect("/list");
+};
+
+// Send deletion data to the main page
+exports.list_delete = function (req, res, next) {
+  // This just clears the cookie in the URL parameter, then redirects to the main page
+  res.clearCookie(req.params.categoryid);
   res.redirect("/list");
 };

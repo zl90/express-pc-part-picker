@@ -26,6 +26,10 @@ block content
           else 
 
         td 
-          button Buy on Amazon 
+          if (item.component !== null)
+            a(href=item.component.amazonUrl target='blank')
+              button Buy on Amazon 
         td 
-          button x
+          if (item.component !== null)
+            form(method='post' action=item.component.deleteUrl)
+                button(type='submit') x 
