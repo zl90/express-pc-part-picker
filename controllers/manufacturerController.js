@@ -194,6 +194,9 @@ exports.manufacturer_update_post = [
     .isLength({ min: 1, max: 1000 })
     .withMessage("Description must be 1-1000 characters long")
     .escape(),
+  body("password")
+    .equals(process.env.ADMIN_PASSWORD)
+    .withMessage("Incorrect Password"),
 
   function (req, res, next) {
     // Extract the validation errors from the POST request.
@@ -351,6 +354,21 @@ exports.manufacturer_delete_post = function (req, res, next) {
         });
         return;
       } else {
+        // Check password
+        if (req.body.password !== process.env.ADMIN_PASSWORD) {
+          // if password doesn't match, go back to the manufacturer delete page with errors
+          const errors = [new Error("Password")];
+          errors[0].msg = "Incorrect Password";
+          res.render("manufacturer_delete", {
+            title: "Delete Manufacturer:\n" + results[0].name,
+            description: results[0].description,
+            component_list: results[1],
+            manufacturer: results[0],
+            errors: errors,
+          });
+          return;
+        }
+
         // No dependents found. Delete this manufacturer
         Manufacturer.findByIdAndRemove(req.params.manufacturerid).exec(
           (error) => {

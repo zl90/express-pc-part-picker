@@ -13,5 +13,12 @@ block content
         p Are you sure you want to delete this manufacturer?
 
         form(method='POST' action="")
+            label(for="password") ADMIN PASSWORD 
+            input(type="password" id='password' minlength=1 name='password')
             button(type="submit") Delete 
             a(href=manufacturer.url) Cancel
+    if (errors)
+        h2 Error: 
+        ul 
+            each error in errors 
+                li= error.msg

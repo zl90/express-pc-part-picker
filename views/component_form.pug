@@ -28,6 +28,10 @@ block content
                 else 
                     each manufacturer in manufacturer_list 
                         option(value=manufacturer._id) #{manufacturer.name}
+            if (isUpdating)
+                label(for="password") ADMIN PASSWORD 
+                input(type="password" id='password' minlength=1 name='password')
+
             button(type="submit") #{isUpdating ? 'Update' : 'Submit'}
             a(href='/components') Cancel
 

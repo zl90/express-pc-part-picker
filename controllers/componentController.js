@@ -388,6 +388,9 @@ exports.component_update_post = [
     .escape(),
   body("categoryid", "A Category must be selected").trim().escape(),
   body("manufacturerid", "A Manufacturer must be selected").trim().escape(),
+  body("password")
+    .equals(process.env.ADMIN_PASSWORD)
+    .withMessage("Incorrect Password"),
 
   function (req, res, next) {
     // From the POST request, we receive a category ID. Query the db to get the category instance:
@@ -488,6 +491,24 @@ exports.component_update_post = [
           });
           return;
         } else {
+          // Check password
+          if (req.body.password !== process.env.ADMIN_PASSWORD) {
+            // if password doesn't match, go back to the component delete page with errors
+            const pwError = new Error("Password");
+            pwError.msg = "Incorrect Password";
+            res.render("component_form", {
+              title: "Update: " + req.body.name,
+              component_category: results[0],
+              component_manufacturer: results[1],
+              component: req.body,
+              isUpdating: true,
+              errors: errors.array().push(pwError),
+              category_list: results[2],
+              manufacturer_list: results[3],
+            });
+            return;
+          }
+
           // No validation errors, save the updated Component to the db
 
           // Create a temporary Component instance with escaped and trimmed data:
@@ -566,11 +587,57 @@ exports.component_delete_get = function (req, res, next) {
 
 // Handle the deleting of a Component on POST
 exports.component_delete_post = function (req, res, next) {
-  Component.findByIdAndRemove(req.params.componentid).exec((err) => {
-    if (err) {
-      return next(err);
-    }
-    // Success, PC component has been deleted. Redirect to the list of PC components:
-    res.redirect("/components");
+  /**
+   * This promise queries the db for the PC Component corresponding to the componentid in the URL
+   */
+  const findComponentById = new Promise((resolve, reject) => {
+    Component.findById(req.params.componentid)
+      .populate("manufacturer")
+      .populate("category")
+      .exec((err, results) => {
+        // Check for db/query errors
+        if (err) {
+          reject(err);
+        }
+
+        // Check for empty results set
+        if (results === null) {
+          // Results are empty, show error
+          const err = new Error("Component not found");
+          err.status = 404;
+          reject(err);
+        }
+
+        // Success, return the PC Component info
+        resolve(results);
+      });
   });
+
+  findComponentById
+    .then((results) => {
+      // Check password
+      if (req.body.password !== process.env.ADMIN_PASSWORD) {
+        // if password doesn't match, go back to the component delete page with errors
+        const errors = [new Error("Password")];
+        errors[0].msg = "Incorrect Password";
+        res.render("component_delete", {
+          title: "Delete Component: \n" + results.name,
+          component: results,
+          errors: errors,
+        });
+        return;
+      }
+
+      // No errors, go ahead and delete the component from the db:
+      Component.findByIdAndRemove(req.params.componentid).exec((err) => {
+        if (err) {
+          return next(err);
+        }
+        // Success, PC component has been deleted. Redirect to the list of PC components:
+        res.redirect("/components");
+      });
+    })
+    .catch((err) => {
+      return next(err);
+    });
 };

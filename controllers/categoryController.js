@@ -189,6 +189,9 @@ exports.category_update_post = [
     .isLength({ min: 1, max: 1000 })
     .withMessage("Description must be 1-1000 characters long")
     .escape(),
+  body("password")
+    .equals(process.env.ADMIN_PASSWORD)
+    .withMessage("Incorrect Password"),
 
   function (req, res, next) {
     // Extract the validation errors from the POST request.
@@ -333,13 +336,33 @@ exports.category_delete_post = function (req, res, next) {
           component_list: results[1],
           category: results[0],
         });
+        return;
       } else {
+        // Check password
+        if (req.body.password !== process.env.ADMIN_PASSWORD) {
+          // if password doesn't match, go back to the category delete page with errors
+          const errors = [new Error("Password")];
+          errors[0].msg = "Incorrect Password";
+          res.render("category_delete", {
+            title: "Delete Category:\n" + results[0].name,
+            description: results[0].description,
+            component_list: results[1],
+            category: results[0],
+            errors: errors,
+          });
+          return;
+        }
+
         // No dependents found. Delete this category
         Category.findByIdAndRemove(req.params.categoryid).exec((error) => {
           // check db/query errors
           if (error) {
             return next(error);
           }
+
+          // Delete associated cookie
+          res.clearCookie(req.params.categoryid);
+
           // Success, Category has been deleted. Redirect to the list of Categoeis:
           res.redirect("/categories");
         });
