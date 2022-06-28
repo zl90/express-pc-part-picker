@@ -5,26 +5,26 @@ const Category = require("../models/category");
 const Component = require("../models/component");
 const Manufacturer = require("../models/manufacturer");
 
-const findAllCategories = new Promise((resolve, reject) => {
-  Category.find().exec((err, results) => {
-    if (err) {
-      reject(err);
-    }
-    resolve(results);
-  });
-});
-
-const findAllComponents = new Promise((resolve, reject) => {
-  Component.find().exec((err, results) => {
-    if (err) {
-      reject(err);
-    }
-    resolve(results);
-  });
-});
-
 // Display the main page ("My List").
 exports.list_get = function (req, res, next) {
+  const findAllCategories = new Promise((resolve, reject) => {
+    Category.find().exec((err, results) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(results);
+    });
+  });
+
+  const findAllComponents = new Promise((resolve, reject) => {
+    Component.find().exec((err, results) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(results);
+    });
+  });
+
   /**
    * This builds a list of all "selected" Components by checking the cookies
    * for componentIDs. If no "selected" Component is found, then the templating
