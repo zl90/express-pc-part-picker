@@ -16,6 +16,7 @@ block content
         td= item.category.name 
         td 
           if (item.component !== null) 
+            img(src=item.component.imgPath alt=item.component.name class="img-small")
             a(href=item.component.url) #{item.component.name}
           else 
             a(href=item.category.url)

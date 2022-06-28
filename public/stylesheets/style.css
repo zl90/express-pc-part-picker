@@ -4,5 +4,15 @@ body {
 }
 
 a {
-  color: #00B7FF;
+  color: #00b7ff;
+}
+
+.img-small {
+  height: 64px;
+  width: 64px;
+}
+
+.img-large {
+  width: 250px;
+  height: 250px;
 }

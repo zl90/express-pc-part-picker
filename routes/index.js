@@ -1,5 +1,16 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
+const path = require("path");
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/images/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)); //Appending extension
+  },
+});
+const upload = multer({ storage: storage });
 
 /* Require Controller modules */
 const component_controller = require("../controllers/componentController");
@@ -18,7 +29,11 @@ router.post("/listdelete/:categoryid", list_controller.list_delete);
 /* Component routes */
 router.get("/components", component_controller.component_list);
 router.get("/component/create", component_controller.component_create_get);
-router.post("/component/create", component_controller.component_create_post);
+router.post(
+  "/component/create",
+  upload.single("component-image"),
+  component_controller.component_create_post
+);
 router.get("/component/:componentid", component_controller.component_detail);
 router.get(
   "/component/:componentid/update",
@@ -26,6 +41,7 @@ router.get(
 );
 router.post(
   "/component/:componentid/update",
+  upload.single("component-image"),
   component_controller.component_update_post
 );
 router.get(

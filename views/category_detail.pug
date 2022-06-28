@@ -21,13 +21,14 @@ block content
         each val in component_list
             tr
                 td 
+                    img(src=val.imgPath alt=val.name class="img-small")
                     a(href=val.url) #{val.name}
                 td 
                     a(href=val.manufacturer.url) #{val.manufacturer.name}
                 td 
-                     #{val.quantity}
+                    | #{val.quantity}
                 td 
-                    #{val.price}
+                    | $#{val.price}
                 td 
                     form(method='post' action=val.addUrl)
                         button(type="submit") + Add

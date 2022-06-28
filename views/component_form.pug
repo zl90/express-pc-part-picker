@@ -1,43 +1,47 @@
 extends layout 
 
 block content
-    h1= title 
+    h1= title
+    if (component)
+        img(src=component.imgPath alt=component.name class="img-large")
     
-        form(method='POST' action='' class='component-form')
-            label(for="component-name") NAME 
-            input(type="text" id='component-name' minlength=1 maxlength=100 value=component ? component.name : '' name='name' required=true)
-            label(for="component-description") FEATURES 
-            textarea(type="text" cols="30" rows="10" id='component-description' minlength=1 maxlength=1000 required=true name='description') #{component ? component.description : '' }
-            label(for="component-price") PRICE 
-            input(type="number" id='component-price' min=0 max=999999 value=component ? component.price : 0 name='price' step='any' required=true)
-            label(for="component-stock") STOCK 
-            input(type="number" id='component-stock' min=0 max=9999 value=component ? component.quantity : 0 name='quantity' required=true)
-            label(for="category") CATEGORY 
-            select(name='categoryid' id='category' required=true placeholder='Select Category...')
-                if (component != null)
-                    each category in category_list 
-                        option(value=category._id selected=((component_category._id.toString() === category._id.toString()) ? true : false))= category.name
-                else 
-                    each category in category_list 
-                        option(value=category._id) #{category.name}
-            label(for="manufacturer") MANUFACTURER 
-            select(name='manufacturerid' id='manufacturer' required=true placeholder='Select Manufacturer...')
-                if (component != null)
-                    each manufacturer in manufacturer_list 
-                        option(value=manufacturer._id selected=((component_manufacturer._id.toString() === manufacturer._id.toString()) ? true : false))= manufacturer.name
-                else 
-                    each manufacturer in manufacturer_list 
-                        option(value=manufacturer._id) #{manufacturer.name}
-            if (isUpdating)
-                label(for="password") ADMIN PASSWORD 
-                input(type="password" id='password' minlength=1 name='password')
+    form(method='POST' action='' class='component-form' enctype="multipart/form-data")
+        label(for="component-name") NAME 
+        input(type="text" id='component-name' minlength=1 maxlength=100 value=component ? component.name : '' name='name' required=true)
+        label(for="component-description") FEATURES 
+        textarea(type="text" cols="30" rows="10" id='component-description' minlength=1 maxlength=1000 required=true name='description') #{component ? component.description : '' }
+        label(for="component-price") PRICE 
+        input(type="number" id='component-price' min=0 max=999999 value=component ? component.price : 0 name='price' step='any' required=true)
+        label(for="component-stock") STOCK 
+        input(type="number" id='component-stock' min=0 max=9999 value=component ? component.quantity : 0 name='quantity' required=true)
+        label(for="category") CATEGORY 
+        select(name='categoryid' id='category' required=true placeholder='Select Category...')
+            if (component != null)
+                each category in category_list 
+                    option(value=category._id selected=((component_category._id.toString() === category._id.toString()) ? true : false))= category.name
+            else 
+                each category in category_list 
+                    option(value=category._id) #{category.name}
+        label(for="manufacturer") MANUFACTURER 
+        select(name='manufacturerid' id='manufacturer' required=true placeholder='Select Manufacturer...')
+            if (component != null)
+                each manufacturer in manufacturer_list 
+                    option(value=manufacturer._id selected=((component_manufacturer._id.toString() === manufacturer._id.toString()) ? true : false))= manufacturer.name
+            else 
+                each manufacturer in manufacturer_list 
+                    option(value=manufacturer._id) #{manufacturer.name}
+        label(for="image-upload") IMAGE 
+        input(type="file" id='image-upload' name='component-image')
+        if (isUpdating)
+            label(for="password") ADMIN PASSWORD 
+            input(type="password" id='password' minlength=1 name='password')
 
-            button(type="submit") #{isUpdating ? 'Update' : 'Submit'}
-            a(href='/components') Cancel
+        button(type="submit") #{isUpdating ? 'Update' : 'Submit'}
+        a(href='/components') Cancel
 
-        if (errors)
-            h2 Error: 
-            ul 
-                each error in errors 
-                    li= error.msg
+    if (errors)
+        h2 Error: 
+        ul 
+            each error in errors 
+                li= error.msg
 

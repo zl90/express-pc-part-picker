@@ -254,6 +254,10 @@ exports.component_create_post = [
                 res.redirect(found_component.url);
               } else {
                 // Create the new Component instance with escaped and trimmed data:
+                let imgPath = "/images/unknown.png";
+                if (req.file) {
+                  imgPath = "/images/" + req.file.filename;
+                }
                 const newComponent = new Component({
                   name: req.body.name,
                   description: req.body.description,
@@ -261,6 +265,7 @@ exports.component_create_post = [
                   quantity: req.body.quantity,
                   category: results[0],
                   manufacturer: results[1],
+                  imgPath: imgPath,
                 });
 
                 //  Save new Component to the db using Mongoose:
@@ -465,11 +470,38 @@ exports.component_update_post = [
       });
     });
 
+    /**
+     * This promise queries the db for the PC Component corresponding to the componentid in the URL
+     */
+    const findComponentById = new Promise((resolve, reject) => {
+      Component.findById(req.params.componentid)
+        .populate("manufacturer")
+        .populate("category")
+        .exec((err, results) => {
+          // Check for db/query errors
+          if (err) {
+            reject(err);
+          }
+
+          // Check for empty results set
+          if (results === null) {
+            // Results are empty, show error
+            const err = new Error("Component not found");
+            err.status = 404;
+            reject(err);
+          }
+
+          // Success, return the PC Component info
+          resolve(results);
+        });
+    });
+
     Promise.all([
       findCategoryById,
       findManufacturerById,
       getAllCategories,
       getAllManufacturers,
+      findComponentById,
     ])
       .then((results) => {
         // Manufacturer and Component data successfully queried. Proceed to update the db with new Component values:
@@ -510,7 +542,13 @@ exports.component_update_post = [
           }
 
           // No validation errors, save the updated Component to the db
-
+          let imgPath = "/images/unknown.png";
+          if (results[4].imgPath) {
+            imgPath = results[4].imgpath;
+          }
+          if (req.file) {
+            imgPath = "/images/" + req.file.filename;
+          }
           // Create a temporary Component instance with escaped and trimmed data:
           const newComponent = new Component({
             name: req.body.name,
@@ -520,6 +558,7 @@ exports.component_update_post = [
             category: results[0],
             manufacturer: results[1],
             _id: req.params.componentid, //This is required, or a new ID will be assigned!
+            imgPath: imgPath,
           });
 
           // Update the db with new Component instance

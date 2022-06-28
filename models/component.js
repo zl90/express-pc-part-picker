@@ -19,6 +19,7 @@ const ComponentSchema = new Schema({
     required: true,
   },
   category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
+  imgPath: { type: String, default: "/images/unknown.png" },
 });
 
 // Virtual for PC Component's URL (used to create hyperlinks in the views)
