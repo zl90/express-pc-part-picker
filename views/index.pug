@@ -23,7 +23,7 @@ block content
               button + Choose #{item.category.name}
         td
           if (item.component !== null)
-            | #{'$' + item.component.price}
+            | #{'$' + item.component.price.toFixed(2)}
           else 
 
         td 
@@ -37,4 +37,4 @@ block content
     tr 
       td 
       td 
-      td Total: $#{totalPrice}
+      td Total: $#{totalPrice.toFixed(2)}

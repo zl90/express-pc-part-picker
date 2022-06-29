@@ -542,12 +542,13 @@ exports.component_update_post = [
           }
 
           // No validation errors, save the updated Component to the db
-          let imgPath = "/images/unknown.png";
-          if (results[4].imgPath) {
-            imgPath = results[4].imgpath;
+          let tempImgPath = "/images/unknown.png";
+
+          if (results[4].imgPath !== "/images/unknown.png") {
+            tempImgPath = results[4].imgPath;
           }
           if (req.file) {
-            imgPath = "/images/" + req.file.filename;
+            tempImgPath = "/images/" + req.file.filename;
           }
           // Create a temporary Component instance with escaped and trimmed data:
           const newComponent = new Component({
@@ -558,7 +559,7 @@ exports.component_update_post = [
             category: results[0],
             manufacturer: results[1],
             _id: req.params.componentid, //This is required, or a new ID will be assigned!
-            imgPath: imgPath,
+            imgPath: tempImgPath,
           });
 
           // Update the db with new Component instance

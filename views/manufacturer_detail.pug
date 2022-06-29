@@ -28,7 +28,7 @@ block content
                 td 
                     | #{val.quantity}
                 td 
-                    | $#{val.price}
+                    | $#{val.price.toFixed(2)}
                 td 
                     form(method='post' action=val.addUrl)
                         button(type="submit") + Add

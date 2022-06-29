@@ -18,7 +18,7 @@ block content
             a(class='component-detail-link' href=component.manufacturer.url) #{component.manufacturer.name}
         li(class='component-detail-li')
             h2(class='component-detail-heading') Price 
-            p $#{component.price}
+            p $#{component.price.toFixed(2)}
         li(class='component-detail-li')
             h2(class='component-detail-heading') Stock 
             p #{component.quantity}
