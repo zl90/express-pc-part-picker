@@ -511,11 +511,12 @@ exports.component_update_post = [
 
         if (!errors.isEmpty()) {
           // There are errors. Render the Update Component form again with sanitized values/error messages.
+
           res.render("component_form", {
             title: "Update: " + req.body.name,
             component_category: results[0],
             component_manufacturer: results[1],
-            component: req.body,
+            component: results[4],
             isUpdating: true,
             errors: errors.array(),
             category_list: results[2],
@@ -532,7 +533,7 @@ exports.component_update_post = [
               title: "Update: " + req.body.name,
               component_category: results[0],
               component_manufacturer: results[1],
-              component: req.body,
+              component: results[4],
               isUpdating: true,
               errors: errors.array().push(pwError),
               category_list: results[2],

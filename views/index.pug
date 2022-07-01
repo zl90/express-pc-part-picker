@@ -1,40 +1,45 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  
+  div(class='list-title-container')
+        img(src='/images/logo.png' alt='PC Part Picker logo')
+        p Build your own PC!
 
   table 
     tr 
-      th Component 
-      th Selection 
-      th Price 
-      th 
-      th
+      th(class='list-category-header') Component 
+      th(class='list-selection-header') Selection 
+      th(class='list-price-header') Price 
+      th(class='list-buy')
+      th(class='list-close') 
     each item in listArray 
       tr 
-        td= item.category.name 
-        td 
+        td(class='list-category')= item.category.name 
+        td(class="list-selection") 
           if (item.component !== null) 
             img(src=item.component.imgPath alt=item.component.name class="img-small")
             a(href=item.component.url) #{item.component.name}
           else 
             a(href=item.category.url)
               button + Choose #{item.category.name}
-        td
+        td(class='list-price')
           if (item.component !== null)
             | #{'$' + item.component.price.toFixed(2)}
           else 
 
-        td 
+        td(class='list-buy')
           if (item.component !== null)
             a(href=item.component.amazonUrl target='blank')
               button Buy on Amazon 
-        td 
+        td(class='list-close') 
           if (item.component !== null)
             form(method='post' action=item.component.deleteUrl)
                 button(type='submit') x 
     tr 
-      td 
-      td 
-      td Total: $#{totalPrice.toFixed(2)}
+      td(class='list-category') 
+      td(class='list-selection') 
+      td(class='list-price') Total: $#{totalPrice.toFixed(2)}
+      td(class='list-buy')
+      td(class='list-close') 
+      

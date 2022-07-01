@@ -1,22 +1,27 @@
 extends layout 
 
 block content
-    h1= title 
+    div(class='list-title-container')
+        h1= title
     
-        form(method='POST' action='' class='manufacturer-form')
-            label(for="manufacturer-name") NAME 
-            input(type="text" id='manufacturer-name' minlength=1 maxlength=100 value=manufacturer ? manufacturer.name : '' name='name')
-            label(for="manufacturer-description") DESCRIPTION 
-            textarea( cols="30" rows="10" id='manufacturer-description' minlength=1 maxlength=1000  name='description') #{manufacturer ? manufacturer.description : ''}
-            if (isUpdating)
-                label(for="password") ADMIN PASSWORD 
-                input(type="password" id='password' minlength=1 name='password')
-            button(type="submit") #{isUpdating ? 'Update' : 'Submit'}
-            a(href='/manufacturers') Cancel
+    form(method='POST' action='' class='component-form')
+        label(for="manufacturer-name") NAME 
+        input(type="text" id='manufacturer-name' minlength=1 maxlength=100 value=manufacturer ? manufacturer.name : '' name='name')
+        label(for="manufacturer-description") DESCRIPTION 
+        textarea( cols="30" rows="10" id='manufacturer-description' minlength=1 maxlength=1000  name='description') #{manufacturer ? manufacturer.description : ''}
+        if (isUpdating)
+            label(for="password") ADMIN PASSWORD 
+            input(type="password" id='password' minlength=1 name='password')
+        button(type="submit" class='update-button') #{isUpdating ? 'Update' : 'Submit'}
+        if (isUpdating)
+            a(href=manufacturer.url class='cancel-button') Cancel
+        else 
+            a(href='/manufacturers' class='cancel-button') Cancel
 
         if (errors)
-            h2 Error: 
-            ul 
-                each error in errors 
-                    li= error.msg
+            div(class='error-container')
+                h2 Error: 
+                ul 
+                    each error in errors 
+                        li= error.msg
 

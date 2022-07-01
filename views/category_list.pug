@@ -1,12 +1,12 @@
 extends layout 
 
 block content
-    h1= title 
-    a(href='/category/create') + Add new Category
+    div(class='list-title-container')
+        h1= title
+        a(href='/category/create') + Add New Category
 
-
-    ul
+    ul(class='list-container')
         each val in category_names
-            li 
-                button(class='list-item-button')
-                    a(href=val.url) #{val.name}
+            li
+                a(href=val.url class="list-item-link")
+                    button(class='list-item-button') #{val.name}

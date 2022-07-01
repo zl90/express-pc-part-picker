@@ -1,0 +1,163 @@
+@import url("https://fonts.googleapis.com/css2?family=Cabin&display=swap");
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s, visibility 0.35s, height 0.35s;
+  overflow: hidden;
+  background: black;
+  z-index: -1;
+}
+
+#main-menu {
+  display: block;
+  height: 100px;
+  width: 100%;
+  background: #3d0e61;
+  margin: 0px;
+  z-index: 9;
+}
+
+#main-menu ul {
+  max-width: 800px;
+  width: 100%;
+  height: 100%;
+  margin: 0px auto;
+  padding: 0px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  z-index: 9;
+}
+
+#main-menu li {
+  list-style-type: none;
+  font-size: 2rem;
+}
+
+#main-menu a {
+  color: #91ff2a;
+  font-size: 1.5rem;
+  text-decoration: none;
+}
+
+#main-menu a:hover {
+  text-decoration: underline;
+}
+
+#hamburger-input {
+  display: none;
+}
+
+#hamburger-menu {
+  top: 20px;
+  left: 20px;
+  width: 30px;
+  height: 30px;
+  display: none;
+  border: none;
+  padding: 8px;
+  margin: 0px;
+  background: linear-gradient(
+    to bottom,
+    #cecece,
+    #cecece 20%,
+    rgba(255, 255, 255, 0) 20%,
+    rgba(255, 255, 255, 0) 40%,
+    #cecece 40%,
+    #cecece 60%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0) 80%,
+    #cecece 80%,
+    #cecece 100%
+  );
+}
+
+#hamburger-menu:hover {
+  cursor: pointer;
+}
+
+#hamburger-menu #sidebar-menu {
+  visibility: hidden;
+  position: relative;
+  top: -300px;
+  left: -178px;
+  width: 200px;
+  height: 250px;
+  background: rgb(61, 61, 61);
+  background: linear-gradient(45deg, rgb(46, 46, 46) 1%, rgb(36, 35, 35) 100%);
+  /* transition: 0.15s; */
+  padding: 0px 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 16px;
+}
+
+#hamburger-input:checked + #hamburger-menu #sidebar-menu {
+  visibility: visible;
+  left: -178px;
+  top: 37px;
+}
+
+#hamburger-menu #sidebar-menu a {
+  text-decoration: none;
+}
+
+#hamburger-menu #sidebar-menu ul {
+  width: 100%;
+  padding-top: 16px;
+}
+
+#hamburger-menu #sidebar-menu li {
+  width: 100%;
+  padding-left: 16px;
+}
+
+#hamburger-menu #sidebar-menu li:hover {
+  text-decoration: none;
+  background-color: rgba(0, 0, 0, 0.185);
+}
+
+#hamburger-menu h3 {
+  color: #8bff2c;
+  font-size: 2.2rem;
+}
+
+#hamburger-menu ul {
+  padding-left: 0px;
+}
+
+#hamburger-menu li {
+  list-style-type: none;
+  line-height: 3rem;
+}
+
+#hamburger-menu a {
+  color: #8bff2c;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+#hamburger-menu a:hover {
+  text-decoration: underline;
+}
+
+#hamburger-input:checked ~ .overlay {
+  visibility: visible;
+  opacity: 0.4;
+}
+
+#main-menu {
+  display: none;
+}
+#hamburger-menu {
+  display: inline;
+}

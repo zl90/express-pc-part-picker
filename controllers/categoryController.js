@@ -194,42 +194,68 @@ exports.category_update_post = [
     .withMessage("Incorrect Password"),
 
   function (req, res, next) {
-    // Extract the validation errors from the POST request.
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      // There are errors. Render the Update Category form again with sanitized values/error messages.
-      res.render("category_form", {
-        title: "Update: " + req.body.name,
-        category: req.body,
-        isUpdating: true,
-        errors: errors.array(),
-      });
-      return;
-    } else {
-      // No validation errors, update the Category in the db
-      // Create a temporary Category instance with escaped and trimmed data:
-      const newCategory = new Category({
-        name: req.body.name,
-        description: req.body.description,
-        _id: req.params.categoryid, // This is required, or a new ID will be assigned!
-      });
-
-      // Overwrite the old category in the db with the temporary category using Mongoose:
-      Category.findByIdAndUpdate(
-        req.params.categoryid,
-        newCategory,
-        {},
-        (update_errors, updated_category) => {
-          // check db/query errors
-          if (update_errors) {
-            return next(update_errors);
-          }
-          // Category successfully updated. Redirect to its Detail page
-          res.redirect(updated_category.url);
+    // This promise finds a specific Category, from the category ID in the URL parameter
+    const findCategoryById = new Promise((resolve, reject) => {
+      Category.findById(req.params.categoryid).exec((err, results) => {
+        // Check for query/db errors
+        if (err) {
+          reject(err);
         }
-      );
-    }
+
+        if (results === null) {
+          // No results returned from query, show error
+          const err = new Error("Category not found");
+          err.status = 404;
+          reject(err);
+        }
+
+        // Success, return Category info
+        resolve(results);
+      });
+    });
+
+    findCategoryById
+      .then((results) => {
+        // Extract the validation errors from the POST request.
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+          // There are errors. Render the Update Category form again with sanitized values/error messages.
+          res.render("category_form", {
+            title: "Update: " + req.body.name,
+            category: results,
+            isUpdating: true,
+            errors: errors.array(),
+          });
+          return;
+        } else {
+          // No validation errors, update the Category in the db
+          // Create a temporary Category instance with escaped and trimmed data:
+          const newCategory = new Category({
+            name: req.body.name,
+            description: req.body.description,
+            _id: req.params.categoryid, // This is required, or a new ID will be assigned!
+          });
+
+          // Overwrite the old category in the db with the temporary category using Mongoose:
+          Category.findByIdAndUpdate(
+            req.params.categoryid,
+            newCategory,
+            {},
+            (update_errors, updated_category) => {
+              // check db/query errors
+              if (update_errors) {
+                return next(update_errors);
+              }
+              // Category successfully updated. Redirect to its Detail page
+              res.redirect(updated_category.url);
+            }
+          );
+        }
+      })
+      .catch((err) => {
+        return next(err);
+      });
   },
 ];
 

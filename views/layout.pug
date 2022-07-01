@@ -3,5 +3,62 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel="stylesheet", href="/stylesheets/hamburger-menu.css")
+    link(rel='stylesheet', href='/stylesheets/select.css')
+    script(src="/javascripts/select.js" defer=true) 
+  
+
+
   body
-    block content
+    header
+      div(class="header-container") 
+        div(class='logo-container')
+          a(href='/list')
+            img(src='/images/logo-small.png' alt="Logo small" class="logo-img-small")
+        nav#main-menu
+          ul
+            li
+              a(href='/list') My List 
+            li
+              a(href='/categories') Categories 
+            li
+              a(href='/manufacturers') Manufacturers 
+            li
+              a(href='/components') PC Parts
+        
+        input#hamburger-input.burger-shower(type='checkbox')
+        label#hamburger-menu(for='hamburger-input')
+          nav#sidebar-menu
+            //- img(src='/images/logo-small.png' alt="Logo small" class="logo-img-small")
+            ul
+              li
+                a(href='/list') My List 
+              li
+                a(href='/categories') Categories 
+              li
+                a(href='/manufacturers') Manufacturers 
+              li
+                a(href='/components') PC Parts
+        .overlay
+        
+    div(class="content")
+      div(class="content-container")
+        block content
+    footer
+      div(class="footer-container")
+        div(class='small-logo-container')
+          a(href='/list')
+            img(src='/images/logo-small.png' alt="Logo" class="logo-img-small")
+        hr
+        ul(class='footer-menu-container') 
+          li
+            a(href="/list") My List
+          li 
+            a(href='/categories') Categories 
+          li 
+            a(href='/manufacturers') Manufacturers
+          li 
+            a(href='/components') PC Parts 
+
+  
+

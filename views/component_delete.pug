@@ -1,16 +1,19 @@
 extends layout 
 
 block content
-    h1= title 
-    p Are you sure you want to delete this component?
+    div(class='list-title-container')
+        h1= title
+        p Are you sure you want to delete this component?
 
-    form(method='POST' action="")
+    form(method='POST' action="" class='component-form')
+        
         label(for="password") ADMIN PASSWORD 
         input(type="password" id='password' minlength=1 name='password')
-        button(type="submit") Delete 
-        a(href=component.url) Cancel
+        button(type="submit" class="update-button") Delete 
+        a(href=component.url class='cancel-button') Cancel
     if (errors)
-        h2 Error: 
-        ul 
-            each error in errors 
-                li= error.msg
+        div(class='error-container')
+            h2 Error: 
+            ul 
+                each error in errors 
+                    li= error.msg

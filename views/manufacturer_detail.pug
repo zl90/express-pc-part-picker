@@ -1,34 +1,36 @@
 extends layout 
 
 block content
-    h1= title 
-    p= description
-    a(href=manufacturer.url + '/update') Update
-    a(href=manufacturer.url + '/delete') Delete
+    div(class='list-title-container')
+        h1= title
+        div(class="title-links-container")
+            a(href=manufacturer.url + '/update') Update
+            a(href=manufacturer.url + '/delete') Delete
+        p= manufacturer.description        
 
-    table
+    table(class='component-list-table')
         tr
-            th 
+            th(class='list-name-header') 
                 p Name 
-            th 
+            th(class='list-category-header')  
                 p Category 
-            th 
+            th(class='list-stock-header')  
                 p Stock 
-            th 
+            th(class='list-price-header')  
                 p Price 
-            th 
+            th(class='list-add-header') 
 
         each val in component_list
             tr
-                td 
+                td(class='list-name')  
                     img(src=val.imgPath alt=val.name class="img-small")
                     a(href=val.url) #{val.name}
-                td 
+                td(class='list-category') 
                     a(href=val.category.url) #{val.category.name}
-                td 
+                td(class='list-stock') 
                     | #{val.quantity}
-                td 
+                td(class='list-price') 
                     | $#{val.price.toFixed(2)}
-                td 
+                td(class='list-add') 
                     form(method='post' action=val.addUrl)
                         button(type="submit") + Add

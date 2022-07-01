@@ -199,41 +199,69 @@ exports.manufacturer_update_post = [
     .withMessage("Incorrect Password"),
 
   function (req, res, next) {
-    // Extract the validation errors from the POST request.
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      // There are errors. Render the Update Manufacturer form again with sanitized values/error messages.
-      res.render("manufacturer_form", {
-        title: "Update: " + req.body.name,
-        manufacturer: req.body,
-        isUpdating: true,
-        errors: errors.array(),
-      });
-      return;
-    } else {
-      // No validation errors, update the Manufacturer in the db
-      // Create a temporary Manufacturer instance with escaped and trimmed data:
-      const newManufacturer = new Manufacturer({
-        name: req.body.name,
-        description: req.body.description,
-        _id: req.params.manufacturerid, //This is required, or a new ID will be assigned!
-      });
-
-      // Overwrite the old manufacturer in the db with the temporary manufacturer using Mongoose:
-      Manufacturer.findByIdAndUpdate(
-        req.params.manufacturerid,
-        newManufacturer,
-        {},
-        (update_errors, updated_manufacturer) => {
-          if (update_errors) {
-            return next(update_errors);
-          }
-          // Manufacturer successfully updated. Redirect to it's Detail page
-          res.redirect(updated_manufacturer.url);
+    /**
+     * This promise queries the db for a Manufacturer which has the ID supplied in the URL
+     */
+    const findManufacturerById = new Promise((resolve, reject) => {
+      Manufacturer.findById(req.params.manufacturerid).exec((err, results) => {
+        // check for db/query errors
+        if (err) {
+          reject(err);
         }
-      );
-    }
+
+        if (results === null) {
+          // No results returned from query, show error
+          const err = new Error("Manufacturer not found");
+          err.status = 404;
+          reject(err);
+        }
+
+        // Success, return category info
+        resolve(results);
+      });
+    });
+
+    findManufacturerById
+      .then((results) => {
+        // Extract the validation errors from the POST request.
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+          // There are errors. Render the Update Manufacturer form again with sanitized values/error messages.
+          res.render("manufacturer_form", {
+            title: "Update: " + req.body.name,
+            manufacturer: results,
+            isUpdating: true,
+            errors: errors.array(),
+          });
+          return;
+        } else {
+          // No validation errors, update the Manufacturer in the db
+          // Create a temporary Manufacturer instance with escaped and trimmed data:
+          const newManufacturer = new Manufacturer({
+            name: req.body.name,
+            description: req.body.description,
+            _id: req.params.manufacturerid, //This is required, or a new ID will be assigned!
+          });
+
+          // Overwrite the old manufacturer in the db with the temporary manufacturer using Mongoose:
+          Manufacturer.findByIdAndUpdate(
+            req.params.manufacturerid,
+            newManufacturer,
+            {},
+            (update_errors, updated_manufacturer) => {
+              if (update_errors) {
+                return next(update_errors);
+              }
+              // Manufacturer successfully updated. Redirect to it's Detail page
+              res.redirect(updated_manufacturer.url);
+            }
+          );
+        }
+      })
+      .catch((err) => {
+        return next(err);
+      });
   },
 ];
 

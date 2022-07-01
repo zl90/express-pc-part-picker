@@ -1,22 +1,28 @@
 extends layout 
 
 block content
-    h1= title 
+
+    div(class='list-title-container')
+        h1= title
     
-        form(method='POST' action='' class='category-form')
-            label(for="category-name") NAME 
-            input(type="text" id='category-name' minlength=1 maxlength=100 value=category ? category.name : '' name='name')
-            label(for="category-description") DESCRIPTION 
-            textarea( cols="30" rows="10" type="text" id='category-description' minlength=1 maxlength=1000  name='description') #{category ? category.description : ''}
-            if (isUpdating)
-                label(for="password") ADMIN PASSWORD 
-                input(type="password" id='password' minlength=1 name='password')
-            button(type="submit") #{isUpdating ? 'Update' : 'Submit'}
-            a(href='/categories') Cancel
+    form(method='POST' action='' class='component-form')
+        label(for="category-name") NAME 
+        input(type="text" id='category-name' minlength=1 maxlength=100 value=category ? category.name : '' name='name')
+        label(for="category-description") DESCRIPTION 
+        textarea( cols="30" rows="10" type="text" id='category-description' minlength=1 maxlength=1000  name='description') #{category ? category.description : ''}
+        if (isUpdating)
+            label(for="password") ADMIN PASSWORD 
+            input(type="password" id='password' minlength=1 name='password')
+        button(type="submit" class='update-button') #{isUpdating ? 'Update' : 'Submit'}
+        if (isUpdating)
+            a(href=category.url class='cancel-button') Cancel
+        else 
+            a(href='/categories' class='cancel-button') Cancel
 
         if (errors)
-            h2 Error: 
-            ul 
-                each error in errors 
-                    li= error.msg
+            div(class='error-container')
+                h2 Error: 
+                ul 
+                    each error in errors 
+                        li= error.msg
 
