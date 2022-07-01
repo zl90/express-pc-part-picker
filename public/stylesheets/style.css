@@ -98,13 +98,13 @@ hr {
 }
 
 .content .list-category {
-  flex: 4;
+  width: 90px;
   justify-content: flex-start;
   font-weight: bold;
 }
 
 .content .list-category-header {
-  flex: 4;
+  width: 90px;
   font-size: 1rem;
   justify-content: flex-start;
 }
@@ -346,11 +346,6 @@ footer a:hover {
   justify-content: flex-start;
 }
 
-.component-list-table .list-category,
-.component-list-table .list-category-header {
-  flex: 2;
-}
-
 .component-list-table .list-price,
 .component-list-table .list-price-header {
   flex: 2;
@@ -548,4 +543,189 @@ select:focus {
   color: rgb(201, 25, 25);
 
   padding-bottom: 16px;
+}
+
+/*-.,,_,,.-=*'``'*-.,,_,,.-=*'``'*-.,,_,,.-=*'``'*-.,,_,,.-=*'`*/
+/*                          MOBILE                             */
+/*.-=*'``'-.,,_,,.-=*'``'*-.,,_,,.-=*'``'*-.,,_,,.-=*'``'*-.,,_*/
+
+@media only screen and (max-width: 700px) {
+  .content tbody {
+    gap: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content tr {
+    flex-direction: column;
+    height: 230px;
+    border-bottom: none;
+    background-color: rgba(0, 0, 0, 0.226);
+    padding: 20px;
+  }
+
+  .content .list-category {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .content .list-header-row {
+    display: none;
+  }
+
+  .content td {
+    width: 100%;
+    height: 32px;
+  }
+
+  .list-buy button,
+  .list-buy a {
+    width: 100%;
+    height: 32px;
+  }
+
+  .content .list-selection {
+    height: 60px;
+    width: 80%;
+  }
+
+  .list-selection a {
+    overflow: hidden;
+  }
+
+  .list-selection a,
+  .list-selection button {
+    width: 100%;
+  }
+
+  .list-close button,
+  .list-close form {
+    width: 100%;
+    height: 32px;
+  }
+
+  .list-close button {
+    border: 1px solid rgb(48, 48, 48);
+  }
+
+  .list-close button:hover {
+    background-color: rgba(0, 0, 0, 0.226);
+  }
+
+  .content .list-tr-last {
+    height: 90px;
+    font-size: 1rem;
+  }
+
+  .content .list-tr-last .list-price {
+    color: var(--link-color);
+    justify-content: center;
+    align-items: center;
+  }
+
+  .list-name {
+    padding-top: 16px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .list-name a {
+    font-size: 1rem;
+  }
+
+  .component-list-table tr {
+    padding-bottom: 30px;
+  }
+
+  .component-list-table .list-manufacturer {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .component-list-table img {
+    display: none;
+  }
+
+  .component-list-table td {
+    padding-top: 10px;
+  }
+
+  .component-list-table .list-add button,
+  .component-list-table .list-add form {
+    width: 100%;
+    height: 36px;
+  }
+
+  .component-form-container {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .input-double-top {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cancel-button.smaller-button {
+    width: 100%;
+  }
+
+  .list-title-container p {
+    text-align: center;
+  }
+
+  .title-links-container {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .title-links-container a {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.219);
+    height: 40px;
+  }
+
+  .component-details-container {
+    flex-direction: column;
+  }
+
+  .component-detail-list {
+    width: 100%;
+    padding-left: 55px;
+    padding-right: 55px;
+  }
+
+  .component-detail-li {
+    flex-direction: row;
+    justify-content: space-between;
+    height: 48px;
+  }
+
+  .title-links-container a:hover {
+    background-color: rgba(0, 0, 0, 0.319);
+  }
+
+  .component-detail-image-container form {
+    width: 100%;
+  }
+
+  .component-detail-button-add {
+    width: 100%;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .component-detail-description-container {
+    padding-top: 20px;
+  }
+
+  .component-detail-description-container p {
+    padding-top: 16px;
+  }
 }

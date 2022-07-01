@@ -7,14 +7,14 @@ block content
         p Build your own PC!
 
   table 
-    tr 
+    tr(class='list-tr list-header-row') 
       th(class='list-category-header') Component 
       th(class='list-selection-header') Selection 
       th(class='list-price-header') Price 
       th(class='list-buy')
       th(class='list-close') 
     each item in listArray 
-      tr 
+      tr(class='list-tr')  
         td(class='list-category')= item.category.name 
         td(class="list-selection") 
           if (item.component !== null) 
@@ -35,8 +35,8 @@ block content
         td(class='list-close') 
           if (item.component !== null)
             form(method='post' action=item.component.deleteUrl)
-                button(type='submit') x 
-    tr 
+                button(type='submit' class='list-x-button') x 
+    tr(class='list-tr-last') 
       td(class='list-category') 
       td(class='list-selection') 
       td(class='list-price') Total: $#{totalPrice.toFixed(2)}
