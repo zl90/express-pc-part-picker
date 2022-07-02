@@ -57,7 +57,7 @@ exports.list_get = function (req, res, next) {
 
         if (foundComponent !== undefined && foundComponent !== null) {
           totalPrice += foundComponent.price;
-          console.log(foundComponent.price);
+          
           // push the "selected" component to the list
           listArray.push({
             category: categoryElement,
