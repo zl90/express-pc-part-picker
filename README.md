@@ -6,6 +6,7 @@ PC Part Picker allows users to add PC parts, manufacturers, and categories, and 
 Users can create, read, update and delete PC parts, manufacturers and categories. Additionally, users can upload images for each PC part.
 
 ### [Live Demo](https://tragically-leaf-51585.herokuapp.com/list)
+(Hosted on Heroku - give it a few seconds for the server to wake up!)
 
 ### Desktop
 ![Desktop View 1](https://tragically-leaf-51585.herokuapp.com/images/desktop-view1.png)
